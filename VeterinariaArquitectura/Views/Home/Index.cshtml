@@ -1,8 +1,13 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="home-hero">
+    <h1>El bienestar de tu mascota empieza aquí.</h1>
+    <p>Ten a mano la información de tus pacientes y sus familias en un solo lugar.</p>
+    <div class="home-actions">
+        <a asp-controller="Mascota" asp-action="Lista" class="btn btn-primary">Ver mascotas</a>
+        <a asp-controller="Mascota" asp-action="RegistrarMascota" class="btn btn-secondary">Registrar una mascota</a>
+    </div>
+</section>
+<p class="home-note">PetCare · Gestión veterinaria sencilla y organizada</p>

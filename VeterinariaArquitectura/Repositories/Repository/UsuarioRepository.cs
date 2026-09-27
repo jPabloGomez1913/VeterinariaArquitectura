@@ -2,7 +2,6 @@
 using VeterinariaArquitectura.Data;
 using VeterinariaArquitectura.Models;
 using VeterinariaArquitectura.Repositories.IRepository;
-using VeterinariaArquitectura.ViewModels.Usuario;
 
 namespace VeterinariaArquitectura.Repositories.Repository
 {
@@ -36,6 +35,13 @@ namespace VeterinariaArquitectura.Repositories.Repository
         public async Task<Usuario?> Get(int usuarioId)
         {
             return await _context.Usuarios.FirstOrDefaultAsync(x => x.UsuarioId == usuarioId);
+        }
+
+        public async Task<IReadOnlyList<Usuario>> GetAll()
+        {
+            return await _context.Usuarios.AsNoTracking()
+                .OrderBy(x => x.NombreCompleto)
+                .ToListAsync();
         }
 
         public async Task<bool> Update(Usuario usuario)

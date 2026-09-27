@@ -2,8 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace VeterinariaArquitectura.ViewModels.Usuario
 {
-    public class UsuarioVM
+    public class UsuarioEdicionVM
     {
+        public int UsuarioId { get; set; }
+
         [Required(ErrorMessage = "El nombre completo es obligatorio.")]
         public string NombreCompleto { get; set; } = null!;
 
@@ -17,13 +19,11 @@ namespace VeterinariaArquitectura.ViewModels.Usuario
         [Required(ErrorMessage = "El tipo de documento es obligatorio.")]
         public string TipoDocumento { get; set; }
 
-        [Required(ErrorMessage = "La contraseña es obligatoria.")]
         [DataType(DataType.Password)]
-        public string Clave { get; set; } = null!;
+        public string? Clave { get; set; }
 
-        [Required(ErrorMessage = "Confirme la contraseña.")]
-        [Compare(nameof(Clave), ErrorMessage = "Las contraseñas deben coincidir.")]
         [DataType(DataType.Password)]
-        public string ConfirmarClave { get; set; } = null!;
+        [Compare(nameof(Clave), ErrorMessage = "Las contraseñas deben coincidir.")]
+        public string? ConfirmarClave { get; set; }
     }
 }

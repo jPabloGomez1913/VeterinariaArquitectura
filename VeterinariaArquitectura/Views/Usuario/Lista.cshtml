@@ -1,0 +1,56 @@
+@model IReadOnlyList<VeterinariaArquitectura.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<div class="container mt-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4 page-heading">
+        <div>
+            <h1>Usuarios registrados</h1>
+            <p>Consulta, modifica o elimina los usuarios del sistema.</p>
+        </div>
+        <a asp-action="Crear" class="btn btn-primary">+ Nuevo usuario</a>
+    </div>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-info">@TempData["Mensaje"]</div>
+    }
+
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Tipo de documento</th>
+                    <th>Número de documento</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr><td colspan="5" class="text-center">No hay usuarios registrados.</td></tr>
+                }
+                else
+                {
+                    @foreach (var usuario in Model)
+                    {
+                        <tr>
+                            <td>@usuario.NombreCompleto</td>
+                            <td>@usuario.Correo</td>
+                            <td>@usuario.TipoDocumento</td>
+                            <td>@usuario.NumeroDocumento</td>
+                            <td class="text-center">
+                                <a asp-action="Actualizar" asp-route-id="@usuario.UsuarioId" class="btn btn-sm btn-warning">Actualizar</a>
+                                <a asp-action="Eliminar" asp-route-id="@usuario.UsuarioId" class="btn btn-sm btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

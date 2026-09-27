@@ -1,0 +1,25 @@
+@model VeterinariaArquitectura.Models.Usuario
+
+@{
+    ViewData["Title"] = "Eliminar usuario";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-7 form-panel">
+            <div class="page-heading text-center">
+                <h1>Eliminar usuario</h1>
+                <p>Esta acción no se puede deshacer.</p>
+            </div>
+            <dl class="row mb-4">
+                <dt class="col-sm-4">Nombre</dt><dd class="col-sm-8">@Model.NombreCompleto</dd>
+                <dt class="col-sm-4">Correo</dt><dd class="col-sm-8">@Model.Correo</dd>
+                <dt class="col-sm-4">Documento</dt><dd class="col-sm-8">@Model.NumeroDocumento</dd>
+            </dl>
+            <form asp-action="Eliminar" asp-route-id="@Model.UsuarioId" method="post" class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger w-100">Eliminar usuario</button>
+                <a asp-action="Lista" class="btn btn-secondary w-100">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>

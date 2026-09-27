@@ -5,8 +5,11 @@
 }
 
 <div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Mascotas registradas</h2>
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4 page-heading">
+        <div>
+            <h1>Mascotas registradas</h1>
+            <p>Consulta y administra la información de tus pacientes.</p>
+        </div>
         <a asp-controller="Mascota" asp-action="RegistrarMascota" class="btn btn-primary">+ Nueva mascota</a>
     </div>
 
@@ -17,8 +20,9 @@
         </div>
     }
 
-    <table class="table table-striped table-bordered align-middle">
-        <thead class="table-dark">
+    <div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
             <tr>
                 <th>Nombre</th>
                 <th>Fecha de nacimiento</th>
@@ -59,4 +63,5 @@
             }
         </tbody>
     </table>
+    </div>
 </div>

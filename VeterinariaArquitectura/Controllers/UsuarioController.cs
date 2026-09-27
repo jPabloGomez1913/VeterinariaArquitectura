@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using VeterinariaArquitectura.Models;
 using VeterinariaArquitectura.Repositories.IRepository;
 using VeterinariaArquitectura.ViewModels.Usuario;
+using Microsoft.AspNetCore.Authorization;
 
 namespace VeterinariaArquitectura.Controllers
 {
@@ -14,58 +15,104 @@ namespace VeterinariaArquitectura.Controllers
             _usuarioRepository = usuarioRepository;
         }
 
-
+        [Authorize]
         [HttpGet]
-        public IActionResult Registrarse()
-        {
-            return View();
-        }
+        public async Task<IActionResult> Lista() => View(await _usuarioRepository.GetAll());
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult Crear() => View(new UsuarioVM());
 
         [HttpPost]
-        public async Task<IActionResult> Registrarse(UsuarioVM model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Crear(UsuarioVM model)
         {
-            if (model.Clave != model.ConfirmarClave)
-            {
-                ViewData["Mensaje"] = "Las contraseñas deben coincidir";
-                return View();
-            }
+            if (!ModelState.IsValid) return View(model);
 
-            Usuario usuario = new Usuario()
+            var usuario = new Usuario
             {
                 NombreCompleto = model.NombreCompleto,
                 Correo = model.Correo,
-                Clave = model.Clave,
-                TipoDocumento = model.TipoDocumento,
                 NumeroDocumento = model.NumeroDocumento,
+                TipoDocumento = model.TipoDocumento,
+                Clave = model.Clave
             };
 
-            var usuarioCreado = await _usuarioRepository.Create(usuario);
-            if (usuarioCreado)
+            if (await _usuarioRepository.Create(usuario))
             {
-                return RedirectToAction("Login", "Usuario");
+                TempData["Mensaje"] = "Usuario creado correctamente.";
+                return RedirectToAction(nameof(Lista));
             }
 
-            ViewData["Mensaje"] = "No se puedo crear el usuario";
-            return View();
+            ModelState.AddModelError(string.Empty, "No se pudo crear el usuario.");
+            return View(model);
         }
 
+        [Authorize]
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Actualizar(int id)
         {
-            return View();
+            var usuario = await _usuarioRepository.Get(id);
+            if (usuario == null) return NotFound();
+
+            return View(new UsuarioEdicionVM
+            {
+                UsuarioId = usuario.UsuarioId,
+                NombreCompleto = usuario.NombreCompleto,
+                Correo = usuario.Correo,
+                NumeroDocumento = usuario.NumeroDocumento,
+                TipoDocumento = usuario.TipoDocumento
+            });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginVM model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Actualizar(UsuarioEdicionVM model)
         {
-            var usuario = await _usuarioRepository.Existe(model.Correo, model.Clave);
-            if (usuario == null)
-            {
-                ViewData["Mensaje"] = "Usuario o contraseña incorrecta";
-                return View();
+            if (!ModelState.IsValid) return View(model);
 
+            var usuario = await _usuarioRepository.Get(model.UsuarioId);
+            if (usuario == null) return NotFound();
+
+            usuario.NombreCompleto = model.NombreCompleto;
+            usuario.Correo = model.Correo;
+            usuario.NumeroDocumento = model.NumeroDocumento;
+            usuario.TipoDocumento = model.TipoDocumento;
+            if (!string.IsNullOrWhiteSpace(model.Clave)) usuario.Clave = model.Clave;
+
+            if (await _usuarioRepository.Update(usuario))
+            {
+                TempData["Mensaje"] = "Usuario actualizado correctamente.";
+                return RedirectToAction(nameof(Lista));
             }
-            return RedirectToAction("Index", "Home");
+
+            ModelState.AddModelError(string.Empty, "No se pudo actualizar el usuario.");
+            return View(model);
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Eliminar(int id)
+        {
+            var usuario = await _usuarioRepository.Get(id);
+            return usuario == null ? NotFound() : View(usuario);
+        }
+
+        [HttpPost, ActionName(nameof(Eliminar))]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EliminarConfirmado(int id)
+        {
+            var usuario = await _usuarioRepository.Get(id);
+            if (usuario == null) return NotFound();
+
+            TempData["Mensaje"] = await _usuarioRepository.Delete(usuario)
+                ? "Usuario eliminado correctamente."
+                : "No se pudo eliminar el usuario.";
+            return RedirectToAction(nameof(Lista));
+        }
+
+        // Se conserva la ruta anterior para enlaces existentes.
+        [HttpGet]
+        public IActionResult Registrarse() => RedirectToAction(nameof(Crear));
     }
 }

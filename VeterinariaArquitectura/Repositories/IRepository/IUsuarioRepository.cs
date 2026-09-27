@@ -8,6 +8,7 @@ namespace VeterinariaArquitectura.Repositories.IRepository
         public Task<bool> Update(Usuario usuario);
         public Task<bool> Delete(Usuario usuario);
         public Task<Usuario?> Get(int usuarioId);
+        public Task<IReadOnlyList<Usuario>> GetAll();
         public Task<Usuario?> Existe(string correo, string clave);
     }
 }

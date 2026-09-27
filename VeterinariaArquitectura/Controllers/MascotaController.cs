@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VeterinariaArquitectura.Models;
 using VeterinariaArquitectura.Repositories.IRepository;
 using VeterinariaArquitectura.ViewModels.Mascota;
@@ -15,6 +16,7 @@ namespace VeterinariaArquitectura.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult RegistrarMascota()
         {
             return View();
@@ -42,6 +44,8 @@ namespace VeterinariaArquitectura.Controllers
             return View();
         }
 
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Lista()
         {
@@ -49,6 +53,8 @@ namespace VeterinariaArquitectura.Controllers
             return View(mascotas);
         }
 
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Actualizar(int id)
         {

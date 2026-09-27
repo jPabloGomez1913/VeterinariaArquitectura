@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace VeterinariaArquitectura.Migrations
 {
     /// <inheritdoc />
-    public partial class AddMascota : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,6 +27,23 @@ namespace VeterinariaArquitectura.Migrations
                 {
                     table.PrimaryKey("PK_Mascota", x => x.MascotaId);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Usuarios",
+                columns: table => new
+                {
+                    UsuarioId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NombreCompleto = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NumeroDocumento = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TipoDocumento = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Clave = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usuarios", x => x.UsuarioId);
+                });
         }
 
         /// <inheritdoc />
@@ -34,6 +51,9 @@ namespace VeterinariaArquitectura.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Mascota");
+
+            migrationBuilder.DropTable(
+                name: "Usuarios");
         }
     }
 }
