@@ -3,6 +3,8 @@ using VeterinariaArquitectura.Data;
 using VeterinariaArquitectura.Repositories.IRepository;
 using VeterinariaArquitectura.Repositories.Repository;
 using Auth0.AspNetCore.Authentication;
+using VeterinariaArquitectura.Services.IService;
+using VeterinariaArquitectura.Services.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IMascotaRepository, MascotaRepository>();
+builder.Services.AddScoped<IMascotaService, MascotaService>();
 
 
 var app = builder.Build();

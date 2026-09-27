@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VeterinariaArquitectura.Models;
-using VeterinariaArquitectura.Repositories.IRepository;
+using VeterinariaArquitectura.Services.IService;
 using VeterinariaArquitectura.ViewModels.Mascota;
 
 namespace VeterinariaArquitectura.Controllers
 {
     public class MascotaController : Controller
     {
-        private readonly IMascotaRepository _mascotaRepository;
+        private readonly IMascotaService _mascotaService;
 
-        public MascotaController(IMascotaRepository mascotaRepository)
+        public MascotaController(IMascotaService mascotaService)
         {
-            _mascotaRepository = mascotaRepository;
+            _mascotaService = mascotaService;
         }
 
         [HttpGet]
@@ -23,19 +22,11 @@ namespace VeterinariaArquitectura.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegistrarMascota(MascotaVM model)
+        public async Task<IActionResult> RegistrarMascota(MascotaDTO model)
         {
-            Mascota mascota = new Mascota()
-            {
-                Nombre = model.Nombre,
-                FechaNacimiento = model.FechaNacimiento,
-                NombrePropietario = model.NombrePropietario,
-                NumeroPropietario = model.NumeroPropietario,
-                CorreoPropietario = model.CorreoPropietario,
-            };
 
-            var usuarioCreado = await _mascotaRepository.Create(mascota);
-            if (usuarioCreado)
+            var usuarioCreado = await _mascotaService.Crear(model);
+            if (usuarioCreado.Exitoso)
             {
                 return RedirectToAction("Lista", "Mascota");
             }
@@ -49,8 +40,8 @@ namespace VeterinariaArquitectura.Controllers
         [HttpGet]
         public async Task<IActionResult> Lista()
         {
-            var mascotas = await _mascotaRepository.GetAll();
-            return View(mascotas);
+            var mascotas = await _mascotaService.Listar();
+            return View(mascotas.Data);
         }
 
 
@@ -58,37 +49,35 @@ namespace VeterinariaArquitectura.Controllers
         [HttpGet]
         public async Task<IActionResult> Actualizar(int id)
         {
-            var mascota = await _mascotaRepository.Get(id);
-            if (mascota == null)
+            var mascota = await _mascotaService.GetEditar(id);
+            if (!mascota.Exitoso)
             {
                 return RedirectToAction("Lista", "Mascota");
             }
 
-            return View(mascota);
+            return View(mascota.Data);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Actualizar(Mascota model)
+        public async Task<IActionResult> Actualizar(EditarMascotaDTO model)
         {
-            var actualizado = await _mascotaRepository.Update(model);
-            if (actualizado)
+
+
+            var actualizado = await _mascotaService.Editar(model);
+            if (actualizado.Exitoso)
             {
                 return RedirectToAction("Lista", "Mascota");
             }
 
             ViewData["Mensaje"] = "No se pudo actualizar la mascota";
-            return View(model);
+            return View(actualizado.Data);
         }
 
         [HttpPost]
         public async Task<IActionResult> Eliminar(int id)
         {
-            var mascota = await _mascotaRepository.Get(id);
-            if (mascota == null)
-            {
-                return RedirectToAction("Lista", "Mascota");
-            }
-            await _mascotaRepository.Delete(mascota);
+
+            await _mascotaService.Eliminar(id);
             return RedirectToAction("Lista", "Mascota");
         }
     }

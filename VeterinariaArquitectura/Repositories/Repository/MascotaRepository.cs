@@ -2,6 +2,7 @@
 using VeterinariaArquitectura.Data;
 using VeterinariaArquitectura.Models;
 using VeterinariaArquitectura.Repositories.IRepository;
+using VeterinariaArquitectura.ViewModels.Mascota;
 
 namespace VeterinariaArquitectura.Repositories.Repository
 {
@@ -14,16 +15,15 @@ namespace VeterinariaArquitectura.Repositories.Repository
             _context = context;
         }
 
-        public async Task<bool> Create(Mascota mascota)
+        public async Task Create(Mascota mascota)
         {
             await _context.AddAsync(mascota);
-            return await Guardar();
+            
         }
 
-        public async Task<bool> Delete(Mascota mascota)
+        public void Delete(Mascota mascota)
         {
              _context.Remove(mascota);
-            return await Guardar();
 
         }
 
@@ -38,14 +38,29 @@ namespace VeterinariaArquitectura.Repositories.Repository
             return await _context.Mascota.ToListAsync();
         }
 
-        public async Task<bool> Update(Mascota mascota)
+        public void  Update(Mascota mascota)
         {
             _context.Update(mascota);
-            return await Guardar();
+           
         }
-        private async Task<bool> Guardar()
+        public async Task<bool> Guardar()
         {
             return await _context.SaveChangesAsync() >= 1;
+        }
+
+        public async Task<EditarMascotaDTO?> GetActualizar(int mascotaId)
+        {
+            var mascota = await _context.Mascota.Where(wh => wh.MascotaId == mascotaId)
+                .Select(s => new EditarMascotaDTO
+                {
+                    MascotaId = s.MascotaId,
+                    Nombre = s.Nombre,
+                    NombrePropietario = s.NombrePropietario,
+                    NumeroPropietario = s.NumeroPropietario,
+                    CorreoPropietario = s.CorreoPropietario,
+                    FechaNacimiento = s.FechaNacimiento
+                }).FirstOrDefaultAsync();
+            return mascota;
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿namespace VeterinariaArquitectura.ViewModels.Mascota
 {
-    public class MascotaVM
+    public class EditarMascotaDTO
     {
+        public int MascotaId { get; set; }
         public DateOnly FechaNacimiento { get; set; }
         public string Nombre { get; set; } = null!;
         public string NombrePropietario { get; set; } = null!;
