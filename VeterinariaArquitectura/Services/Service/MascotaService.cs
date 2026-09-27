@@ -22,8 +22,12 @@ namespace VeterinariaArquitectura.Services.Service
                 Nombre = mascotaDTO.Nombre,
                 FechaNacimiento = mascotaDTO.FechaNacimiento,
                 NombrePropietario = mascotaDTO.NombrePropietario,
-                NumeroPropietario = mascotaDTO.NumeroPropietario,
-                CorreoPropietario = mascotaDTO.CorreoPropietario,
+                Raza = mascotaDTO.Raza,
+                Especie = mascotaDTO.Especie,
+                Sexo = mascotaDTO.Sexo,
+                Peso = mascotaDTO.Peso,
+                Color = mascotaDTO.Color,
+
             };
             await _repository.Create(mascota);
             var creado = await _repository.Guardar();
@@ -57,9 +61,13 @@ namespace VeterinariaArquitectura.Services.Service
                 };
             }
             mascota.NombrePropietario = editarMascotaDTO.NombrePropietario;
-            mascota.NumeroPropietario = editarMascotaDTO.NumeroPropietario;
-            mascota.CorreoPropietario = editarMascotaDTO.CorreoPropietario;
+            mascota.Raza = editarMascotaDTO.Raza;
+            mascota.Especie = editarMascotaDTO.Especie;
             mascota.Nombre = editarMascotaDTO.Nombre;
+            mascota.FechaNacimiento = editarMascotaDTO.FechaNacimiento;
+            mascota.Color = editarMascotaDTO.Color;
+            mascota.Peso = editarMascotaDTO.Peso;
+            mascota.Sexo = editarMascotaDTO.Sexo;
 
             _repository.Update(mascota);
             var editado = await _repository.Guardar();

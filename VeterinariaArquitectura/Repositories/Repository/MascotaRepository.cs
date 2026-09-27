@@ -56,9 +56,12 @@ namespace VeterinariaArquitectura.Repositories.Repository
                     MascotaId = s.MascotaId,
                     Nombre = s.Nombre,
                     NombrePropietario = s.NombrePropietario,
-                    NumeroPropietario = s.NumeroPropietario,
-                    CorreoPropietario = s.CorreoPropietario,
-                    FechaNacimiento = s.FechaNacimiento
+                    Raza = s.Raza,
+                    Especie = s.Especie,
+                    FechaNacimiento = s.FechaNacimiento,
+                    Peso = s.Peso,
+                    Color = s.Color,
+                    Sexo = s.Sexo,
                 }).FirstOrDefaultAsync();
             return mascota;
         }

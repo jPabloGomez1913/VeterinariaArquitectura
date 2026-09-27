@@ -27,8 +27,11 @@
                 <th>Nombre</th>
                 <th>Fecha de nacimiento</th>
                 <th>Propietario</th>
-                <th>Correo</th>
-                <th>Número</th>
+                <th>Especie</th>
+                <th>Raza</th>
+                <th>Color</th>
+                <th>Peso</th>
+                <th>Sexo</th>
                 <th class="text-center">Acciones</th>
             </tr>
         </thead>
@@ -47,8 +50,11 @@
                         <td>@item.Nombre</td>
                         <td>@item.FechaNacimiento.ToString("dd/MM/yyyy")</td>
                         <td>@item.NombrePropietario</td>
-                        <td>@item.CorreoPropietario</td>
-                        <td>@item.NumeroPropietario</td>
+                        <td>@item.Especie</td>
+                        <td>@item.Raza</td>
+                        <td>@item.Color</td>
+                        <td>@item.Peso</td>
+                        <td>@item.Sexo</td>
                         <td class="text-center">
                             <a asp-controller="Mascota" asp-action="Actualizar" asp-route-id="@item.MascotaId" class="btn btn-sm btn-warning">
                                 Actualizar
