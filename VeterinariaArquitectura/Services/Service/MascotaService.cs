@@ -8,11 +8,27 @@ namespace VeterinariaArquitectura.Services.Service
 {
     public class MascotaService : IMascotaService
     {
-        private readonly IMascotaRepository _repository;
+        private const string ProcesoLog = "Mascota";
 
-        public MascotaService(IMascotaRepository repository)
+        private readonly IMascotaRepository _repository;
+        private readonly ILogProducer _logProducer;
+
+        public MascotaService(IMascotaRepository repository, ILogProducer logProducer)
         {
             _repository = repository;
+            _logProducer = logProducer;
+        }
+
+        private void RegistrarLog(string accion, string mensaje)
+        {
+            _logProducer.Publicar(new LogEvento
+            {
+                Proceso = ProcesoLog,
+                Accion = accion,
+                Nivel = "Information",
+                Mensaje = mensaje,
+                Fecha = DateTime.UtcNow
+            });
         }
 
         public async Task<Response<Mascota>> Crear(MascotaDTO mascotaDTO)
@@ -33,6 +49,7 @@ namespace VeterinariaArquitectura.Services.Service
             var creado = await _repository.Guardar();
             if (creado)
             {
+                RegistrarLog("Crear", $"Mascota '{mascota.Nombre}' creada (Id {mascota.MascotaId})");
                 return new Response<Mascota>
                 {
                     Exitoso = true,
@@ -73,6 +90,7 @@ namespace VeterinariaArquitectura.Services.Service
             var editado = await _repository.Guardar();
             if (editado)
             {
+                RegistrarLog("Editar", $"Mascota '{mascota.Nombre}' editada (Id {mascota.MascotaId})");
                 return new Response<Mascota>
                 {
                     Exitoso = true,
@@ -101,6 +119,7 @@ namespace VeterinariaArquitectura.Services.Service
             var eliminado = await _repository.Guardar();
             if (eliminado)
             {
+                RegistrarLog("Eliminar", $"Mascota '{mascota.Nombre}' eliminada (Id {mascotaId})");
                 return new Response
                 {
                     Exitoso = true,

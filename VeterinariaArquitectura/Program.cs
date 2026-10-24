@@ -29,6 +29,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IMascotaRepository, MascotaRepository>();
 builder.Services.AddScoped<IMascotaService, MascotaService>();
+builder.Services.AddSingleton<ILogProducer, KafkaLogProducer>();
+builder.Services.AddHostedService<KafkaLogConsumer>();
 
 
 var app = builder.Build();

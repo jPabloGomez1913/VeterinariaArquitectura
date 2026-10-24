@@ -12,5 +12,6 @@ namespace VeterinariaArquitectura.Data
 
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Mascota> Mascota { get; set; }
+        public DbSet<LogEvento> LogEventos { get; set; }
     }
 }
