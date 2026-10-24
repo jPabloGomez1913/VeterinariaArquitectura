@@ -12,11 +12,14 @@ namespace VeterinariaArquitectura.Services.Service
 
         private readonly IMascotaRepository _repository;
         private readonly ILogProducer _logProducer;
+        private readonly IUsuarioActual _usuarioActual;
 
-        public MascotaService(IMascotaRepository repository, ILogProducer logProducer)
+        public MascotaService(IMascotaRepository repository, ILogProducer logProducer,
+            IUsuarioActual usuarioActual)
         {
             _repository = repository;
             _logProducer = logProducer;
+            _usuarioActual = usuarioActual;
         }
 
         private void RegistrarLog(string accion, string mensaje)
@@ -27,7 +30,8 @@ namespace VeterinariaArquitectura.Services.Service
                 Accion = accion,
                 Nivel = "Information",
                 Mensaje = mensaje,
-                Fecha = DateTime.UtcNow
+                Fecha = DateTime.UtcNow,
+                Usuario = _usuarioActual.Identificador
             });
         }
 

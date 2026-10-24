@@ -30,6 +30,8 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IMascotaRepository, MascotaRepository>();
 builder.Services.AddScoped<ILogEventoRepository, LogEventoRepository>();
 builder.Services.AddScoped<IMascotaService, MascotaService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUsuarioActual, UsuarioActual>();
 builder.Services.AddSingleton<ILogProducer, KafkaLogProducer>();
 builder.Services.AddHostedService<KafkaLogConsumer>();
 
