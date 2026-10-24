@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Confluent.Kafka;
-using VeterinariaArquitectura.Data;
 using VeterinariaArquitectura.Models;
+using VeterinariaArquitectura.Repositories.IRepository;
 
 namespace VeterinariaArquitectura.Services.Service
 {
@@ -53,9 +53,12 @@ namespace VeterinariaArquitectura.Services.Service
                     {
                         evento.LogEventoId = 0;
                         using var scope = _scopeFactory.CreateScope();
-                        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                        db.LogEventos.Add(evento);
-                        await db.SaveChangesAsync(ct);
+                        var repositorio = scope.ServiceProvider.GetRequiredService<ILogEventoRepository>();
+                        await repositorio.Create(evento);
+                        if (!await repositorio.Guardar())
+                        {
+                            throw new InvalidOperationException("No se pudo guardar el log en la base de datos.");
+                        }
                     }
 
                     // El mensaje se confirma solo después de guardarlo en la base de datos.
