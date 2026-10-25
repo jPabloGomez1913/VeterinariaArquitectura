@@ -6,7 +6,7 @@
         public string NombreCompleto { get; set; } = null!;
         public string Correo { get; set; }= null!;
         public string NumeroDocumento { get; set; } = null!;
-        public string TipoDocumento { get; set; }
+        public required string TipoDocumento { get; set; }
         public string Clave { get; set; } = null!;
     }
 }

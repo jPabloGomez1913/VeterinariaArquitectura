@@ -4,31 +4,34 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-public class AccountController : Controller
+namespace VeterinariaArquitectura.Controllers
 {
-    public async Task Login(string returnUrl = "/")
+    public class AccountController : Controller
     {
-        var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
-            .WithRedirectUri(returnUrl)
-            .Build();
+        public async Task Login(string returnUrl = "/")
+        {
+            var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
+                .WithRedirectUri(returnUrl)
+                .Build();
 
-        await HttpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
-    }
+            await HttpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+        }
 
-    [Authorize]
-    public async Task Logout()
-    {
-        var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
-            .WithRedirectUri(Url.Action("Index", "Home"))
-            .Build();
+        [Authorize]
+        public async Task Logout()
+        {
+            var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
+                .WithRedirectUri(Url.Action("Index", "Home"))
+                .Build();
 
-        await HttpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    }
+            await HttpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        }
 
-    [Authorize]
-    public IActionResult Profile()
-    {
-        return View();
+        [Authorize]
+        public IActionResult Profile()
+        {
+            return View();
+        }
     }
 }
